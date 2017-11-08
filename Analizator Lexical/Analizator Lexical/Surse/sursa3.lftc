@@ -1,0 +1,28 @@
+Begin
+
+lista real[20] listaNumere;
+int n;
+int nr;
+int suma;
+
+citeste n;
+nr = 0;
+suma = 0;
+
+cattimp(nr<n)
+{
+	citeste listaNumere[nr];
+	nr = nr+1;
+}
+
+nr = 0;
+
+cattimp(nr<n)
+{
+	suma = suma + listaNumere[nr];
+	nr = nr+1;
+}
+
+scrie suma;
+
+End

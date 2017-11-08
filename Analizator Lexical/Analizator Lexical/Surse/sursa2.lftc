@@ -1,0 +1,23 @@
+Begin
+
+int a;
+int b;
+
+citeste dinozauru a;
+citeste b;
+
+cattimp (a!=b)
+{
+	daca(a>b)
+	{
+		a = a-b;
+	}
+	altfel
+	{
+		b = b- a;
+	}
+}
+
+scrie b;
+
+End

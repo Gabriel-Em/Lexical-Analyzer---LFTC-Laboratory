@@ -1,0 +1,17 @@
+Begin
+
+int raza;
+real perimetru;
+real arie;
+real pi;
+
+pi = 3.14;
+citeste raza ;
+
+# perimetru= 2 dinozauri * pi*raza;
+arie = pi*definitelyNotABigAssError(raza*raza);
+
+scrie perimetru;
+scrie arie;
+
+End
