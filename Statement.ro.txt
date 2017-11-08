@@ -1,0 +1,197 @@
+  Laborator 1
+Enunt:
+
+  Scrierea unui ANALIZOR LEXICAL pentru un minilimbaj de programare.
+
+1. Specificarea minilimbajului de programare.
+
+	Limbajul va fi adaptat cerintelor formulate la curs sau in orele 
+de laborator. S-a precizat ca limbajul trebuie sa contina anumite 
+instructiuni si tipuri de date:
+- 2 tipuri de date simple si un tip compus
+- instructiuni:	- o instructiune de atribuire
+		- o instructiune de intrare/iesire
+		- o instructiune de selectie (conditionala)
+		- o instructiune de ciclare
+- se impun anumite restrictii relative la identificatori, constante
+
+2. Implementarea unui analizor lexical
+
+     Analizorul lexical accepta la intrare un fisier text reprezentand un
+program sursa si intocmeste ca date de iesire tabelele:
+	FIP - forma interna a programului sursa  si
+	TS  - tabelui  de simboluri
+In plus, programul va trebui sa semnaleze erorile lexicale si locul in care apar.
+
+
+     Analizoarele  lexicale  se vor  diferentia dupa urmatoarele criterii:
+
+  1. identificatori
+	      a. de lungime cel mult opt caractere
+	      b. de lungime oarecare nedepasind 250 caractere
+  2. tabela de simboluri:
+	      a. unica pentru identificatori si constante
+	      b. separat pentru identificatori si constante
+  3. organizarea tabelelor de simboluri:
+	      a. tabel ordonat lexicografic
+	      b. tabel arbore binar lexicografic
+	      c. tabel cu organizare hashing
+
+Programul care efectueaza analiza lexicala trebuie sa fie insotit de
+documentatie.
+
+
+Intarzierile se penalizeaza cu cate un punct pe saptamana, dar nu se admit intarzieri 
+mai mult de 2 saptamani.
+
+Prezentarea la examen este conditionata de predarea tuturor lucrarilor.
+
+
+Exemplu: 
+Definirea limbajului:
+
+ 1 .Definirea limbajului:
+  1.1 Alfabetul limbajului:
+  1.1.a. litere mari (A-Z) si mici (a-z) al alfabetului englez;
+      b. caracterul subliniere '_';
+      c. cifrele sistemului zecimal (0-9);
+  Lexic
+      a.simboluri speciale care reprezinta:
+	 - operatori + - * / := < <= = >=
+	 - delimitatori [ ] { }  : ; blanc
+	 - cuvinte rezervate
+	    array  char  const do else  if int  of program read then var
+	    while write
+      b.identificatori
+	   -este o succesiune de litere, cifre, primul caracter fiind
+	   obligatoriu caracter;
+	regula de constructie:
+	     identificator ::= litera | litera{litera}{cifra}
+	     litera ::= "A" | "B" | . ..| "Z"
+	     cifra ::= "0" | "1" |...| "9"
+      c.constante
+	 1.intregi
+	    regula de constructie:
+	      constnr:=+nr|-nr|nr
+	      nr:=cifra{nr}
+	 2.caracter
+	     caracter:='litera'|'cifra'
+	 3.sir de caracter
+	      constchar:="sirdecaracter"
+	      sirdecaractere:=caract{sirdecaractere}
+	      caract:=litera|cifra
+ 2.2 Sintaxa limbajului:
+	Cuvintele - atomii lexicali predefiniti sunt scrise intre ghilimele:
+a) Reguli sintactice
+    program ::= "VAR" decllist ";" cmpdstmt "."
+   decllist ::= declaration | declaration ";" decllist
+declaration ::= IDENTIFIER ":" type
+      type1 ::= "BOOLEAN" | "CHAR" | "INTEGER" | "REAL"
+  arraydecl ::= "ARRAY" "[" nr "]" "OF" type1
+      type  ::= type1|arraydecl
+   cmpdstmt ::= "BEGIN" stmtlist "END"
+   stmtlist ::= stmt | stmt ";" stmtlist
+       stmt ::= simplstmt | structstmt
+  simplstmt ::= assignstmt | iostmt
+ assignstmt ::= IDENTIFIER ":=" expression
+ expression ::= expression "+" term | term
+       term ::= term "*" factor | factor
+     factor ::= "(" expression ")" | IDENTIFIER
+     iostmt ::= "READ" | "WRITE" "(" IDENTIFIER ")"
+ structstmt ::= cmpdstmt | ifstmt | whilestmt
+     ifstmt ::= "IF" condition "THEN" stmt ["ELSE" stmt]
+  whilestmt ::= "WHILE" condition "DO" stmt
+  condition ::= expression RELATION expression
+b) Reguli lexicale
+ IDENTIFIER ::= letter | letter{letter}{digit}
+     letter ::= "A" | "B" | . ..| "Z"
+      digit ::= "0" | "1" |...| "9"
+   RELATION ::= "<" | "<=" | "=" | "<>" | ">=" | ">"
+
+
+Atomii lexicali sunt codificati:
+- identificatori	- cod 0
+- constante	- cod  1
+- cuvinte cheie: fiecare cuvant cheie are un cod propriu
+- operatori: fiecare operator are un cod propriu
+- separatori (sau delimitatori): fiecare are un cod propriu
+Codificare
+-------------------------
+| tip atom	|   cod |
+-------------------------
+| identificator	|    0  |
+-------------------------
+| constanta	|    1  |
+-------------------------
+| program       |    2  |
+-------------------------
+|  array	|    3  |
+-------------------------
+|    of		|    4  |
+-------------------------
+|    var	|    5  |
+-------------------------
+|  integer      |    6  |
+-------------------------
+|  real  	|    7  |
+-------------------------
+| boolean       |    8  |
+-------------------------
+| begin 	|    9  |
+-------------------------
+| end		|   10  |
+-------------------------
+|read		|   11  |
+-------------------------
+|write 		|   12  |
+-------------------------
+| for		|   13  |
+-------------------------
+| to		|   14  |
+-------------------------
+| do 		|   15  |
+-------------------------
+| if		|   16  |
+-------------------------
+| then		|   17  |
+-------------------------
+|  else  	|   18  |
+-------------------------
+| and		|   19  |
+-------------------------
+|  or		|   20  |
+-------------------------
+|  not		|   21  |
+-------------------------
+| :		|   22  |
+-------------------------
+| ;		|   23  |
+-------------------------
+| ,     	|   24  |
+-------------------------
+| .		|   25  |
+-------------------------
+| +		|   26  |
+-------------------------
+| * 		|   27  |
+-------------------------
+| (		|   28  |
+-------------------------
+| )		|   29  |
+-------------------------
+| [		|   30  |
+-------------------------
+| ]     	|   31  |
+-------------------------
+| -		|   32  |
+-------------------------
+| <     	|   33  |
+-------------------------
+| >		|   34  |
+-------------------------
+| =		|   35  |
+-------------------------
+| := 		|   36  |
+-------------------------
+
+Urmeaza documentatia programului de analiza lexicala!
